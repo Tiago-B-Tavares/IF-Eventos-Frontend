@@ -78,7 +78,6 @@ export default function Page() {
                 isClosable: false,
                 position: "top"
             })
-
         }
     }
         useEffect(() => {
