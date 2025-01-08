@@ -16,12 +16,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <head></head>
       <body>
         <NextAuthSessionProvider>
           <ChakraUIProvider>
             {children}
-            
           </ChakraUIProvider>
         </NextAuthSessionProvider>
       </body>

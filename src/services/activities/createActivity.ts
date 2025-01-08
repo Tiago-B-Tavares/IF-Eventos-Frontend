@@ -1,21 +1,24 @@
+import { TipoAtividade } from "@/enums/activityTipe";
 import { api } from "@/services/setupApiClient";
-import { Session } from "inspector";
+
 
 interface ActivitiesProps {
 
-    horario: string;
+    horario: String;
+    data: String;
     nome: string;
     local: string;
     descricao: string;
     vagas: number;
     concomitante: boolean;
     ch: number;
+    tipo: TipoAtividade;
     evento_id: string | null;
     organizador_id: string | undefined;
 }
 
-export default async function CreateActivity({ nome, horario, local, descricao, vagas, concomitante, ch, evento_id, organizador_id }: ActivitiesProps) {
-    console.log(nome," ", descricao, " ",local," ", horario, " ",vagas, " ",ch, " ",concomitante, " ",evento_id, " ",organizador_id);
+export default async function CreateActivity({ nome, horario, local, data, descricao, vagas, concomitante, ch, tipo, evento_id, organizador_id }: ActivitiesProps) {
+
 
     try {
 
@@ -24,7 +27,7 @@ export default async function CreateActivity({ nome, horario, local, descricao, 
         if (evento_id) {
 
             const response = await api.post(`/atividades?id=${evento_id}`, {
-                nome, horario, local, descricao, vagas, concomitante, ch, organizador_id
+                nome, horario, data, local, descricao, vagas, concomitante, ch, tipo, organizador_id
             });
 
             const activity = response.data;

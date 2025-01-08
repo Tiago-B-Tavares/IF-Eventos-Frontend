@@ -1,3 +1,4 @@
+import { TipoAtividade } from "@/enums/activityTipe";
 import editActivity from "@/services/activities/editActivity";
 import { AtividadesProps } from "@/types/interfaces";
 import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, Input, Select, Stack, useDisclosure, useToast } from "@chakra-ui/react";
@@ -13,12 +14,19 @@ export default function BtnEditar({ atividade }: { atividade: AtividadesProps })
     const [concomitante, setConcomitante] = useState<boolean>(atividade.concomitante);
     const [ch, setCh] = useState<number>(atividade.ch);
     const [vagas, setVagas] = useState<number>(atividade.vagas);
-
+    const [tipo, setTipo] = useState<TipoAtividade>(TipoAtividade.Oficina);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cancelRef = useRef<HTMLButtonElement>(null);
     const toast = useToast()
+
+
+
+
+
+
     const handleEditActivity = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+       
         try {
 
 
@@ -30,6 +38,7 @@ export default function BtnEditar({ atividade }: { atividade: AtividadesProps })
                 descricao,
                 horario,
                 concomitante,
+                tipo,
                 ch,
                 vagas,
             });
@@ -39,8 +48,8 @@ export default function BtnEditar({ atividade }: { atividade: AtividadesProps })
                 status: 'success',
                 duration: 5000,
                 isClosable: false,
-                position:"top"
-              })
+                position: "top"
+            })
 
             onClose();
         } catch (error) {
@@ -120,11 +129,12 @@ export default function BtnEditar({ atividade }: { atividade: AtividadesProps })
                                         required
                                         id="horario"
                                         placeholder="Horário"
-                                        value={horario}
-                                        type='time'
+                                        defaultValue={horario}
+                                        type="time"
                                         onChange={(e) => setHorario(e.target.value)}
                                         className="border border-gray-300 rounded-md"
                                     />
+
                                     <label htmlFor="concomitante">Concomitante</label>
                                     <Select
                                         id="concomitante"
@@ -134,6 +144,21 @@ export default function BtnEditar({ atividade }: { atividade: AtividadesProps })
                                     >
                                         <option value="Sim">Sim</option>
                                         <option value="Não">Não</option>
+                                    </Select>
+                                    <label htmlFor="tipo">Tipo:</label>
+                                    <Select
+                                        id="tipo"
+                                        onChange={(e) => setTipo(e.target.value as unknown as TipoAtividade.Palestra)}
+                                        value={tipo}
+                                    >
+                                        <option value="Oficina">Oficina</option>
+                                        <option value="Palestra">Palestra</option>
+                                        <option value="Workshop">Workshop</option>
+                                        <option value="Minicurso">Minicurso</option>
+                                        <option value="Seminario">Seminário</option>
+                                        <option value="Mesa Redonda">Mesa Redonda</option>
+                                        <option value="Roda de Conversa">Roda de Conversa</option>
+                                        <option value="Outro">Outro</option>
                                     </Select>
                                     <label htmlFor="ch">Carga Horária</label>
                                     <Input

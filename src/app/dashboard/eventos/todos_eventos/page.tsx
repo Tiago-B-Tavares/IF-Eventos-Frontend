@@ -1,149 +1,159 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import getEvents from "@/services/events/getEvents";
-import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Heading, Input, Menu, MenuButton, MenuItem, MenuList, Stack, Textarea, useDisclosure, useToast } from "@chakra-ui/react";
-import { LuCalendarClock } from "react-icons/lu";
-import { MdEditDocument, MdPlace, MdAccessTimeFilled } from "react-icons/md";
-import { FaRegTrashAlt } from "react-icons/fa";
-import { EventoProps } from "@/types/interfaces";
-
-import getAllEvents from "@/services/events/getAllEvents";
-import React from "react";
+import {
+  Image,
+  Button,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Stack,
+  Text,
+  Card,
+  CardBody,
+  Divider,
+  Heading,
+} from "@chakra-ui/react";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { MdAccessTimeFilled, MdCalendarMonth, MdPlace } from "react-icons/md";
+import { EventoProps } from "@/types/interfaces";
+import { CldImage } from "next-cloudinary";
 
-
+import getEvents from "@/services/events/getEvents";
+import getAllEvents from "@/services/events/getAllEvents";
 import BtnEditar from "../components/btnEditar";
 import { BtnExcluir } from "../components/btnExcluir";
 import AddResponsavelEvento from "../components/btnAddResponsavelEvento";
 
-
-
-
 export default function Eventos() {
   const { data: session } = useSession();
-  let [eventos, setEventos] = useState<EventoProps[]>([]);
+  const [eventos, setEventos] = useState<EventoProps[]>([]);
+  const isAdmin = session?.user?.role === "SUPER_ADMIN";
 
-  let IsAdmin = false;
-  if (session?.user.role === "SUPER_ADMIN") {
-    IsAdmin = true;
-  }
-
-  async function fetchEventsAndActivities() {
+  // Função para buscar eventos
+  const fetchEventsAndActivities = async () => {
     if (session?.user?.id) {
-      if (IsAdmin) {
-        try {
-          const listaEventos = await getAllEvents();
-          setEventos(listaEventos);
-
-
-        } catch (error) {
-          console.error("Erro ao obter lista de Eventos:", error);
-        }
-      } else {
-        try {
-          const listaEventos = await getEvents(session.user.id);
-          setEventos(listaEventos);
-        } catch (error) {
-          console.error("Erro ao obter lista de Eventos:", error);
-        }
+      try {
+        const listaEventos = isAdmin
+          ? await getAllEvents()
+          : await getEvents(session.user.id);
+        setEventos(listaEventos);
+      } catch (error) {
+        console.error("Erro ao obter lista de Eventos:", error);
       }
     }
-  }
+  };
+
   useEffect(() => {
     fetchEventsAndActivities();
-  }, [session, eventos]);
-
-
+  }, [session]);
 
   return (
-    <>
+    <div className=" w-full flex flex-wrap gap-6 p-4 border-2 flex-col">
       {eventos.map((e) => (
 
-        <ul className="bg-gray-300 mx-auto min-w-screen-lg p-4" key={e.id}>
-          <li className="flex flex-col justify-start rounded-lg bg-white border border-green-700 m-4">
-            <div className="text-base flex gap-2 p-4 flex-col">
-              <div className="flex justify-between">
-                <Heading as='h2' size='lg' className="underline text-green-800 pb-4">
-                  {e.nome}
-                </Heading>
-                <Menu>
-                  {({ isOpen }) => (
-                    <>
-                      <MenuButton
-                        bg="none"
-                        justifyContent="space-between"
-                        isActive={isOpen}
-                        as={Button}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                        }}
-                      >
-                        <BsThreeDotsVertical className="text-2xl" />
-                      </MenuButton>
-                      <MenuList>
-                        <MenuItem w="100%">
-                          <BtnEditar evento={e} />
-                        </MenuItem>
-                        <MenuItem w="100%">
-                          {IsAdmin && (
-                            <>
-                              <BtnExcluir id={e.id as string} />
-                            </>
-                          )}
-                        </MenuItem>
-                        <MenuItem w="100%">
-                        <AddResponsavelEvento evento_id={e.id as string}/>
-                        </MenuItem>
-                      </MenuList>
-                    </>
-                  )}
-                </Menu>
-              </div>
-
-              <div className="text-gray-500 font-medium">
-                <p className="text-lg text-green-700">Sobre o evento:</p>
-                {e.descricao}
-              </div>
-              <div className="flex flex-row gap-4">
-                <LuCalendarClock className="text-xl text-green-700" />
-                <div className="flex flex-row justify-between gap-4 text-green-700">
-                  <span><b>De:</b> {e.dataInicio}</span>
-                  <span><b>Até:</b> {e.dataFim}</span>
-                </div>
-                <div className="flex flex-row justify-between items-center gap-4 text-green-700">
-                  <MdAccessTimeFilled />
-                  <span><b>Horário:</b> {e.horario}</span>
-                </div>
-              </div>
-              <div className="flex flex-row justify-start gap-4">
-                <MdPlace className="text-xl text-red-700" />
-                <div className="flex flex-row justify-between gap-4 text-green-700">
-                  <span>{e.local}</span>
-                </div>
-              </div>
-
-              <div className="flex justify-between  items-center">
-                <div className="text-green-700">
-                  <b>Organizadores: </b>
-                  {e.organizadores.map((orgEvent) => (
-                    <p className="text-sm" key={orgEvent.organizador.nome}>{orgEvent.organizador.nome}</p>
-                  ))}
-                </div>
-
-                <div className='flex flex-row gap-4 border border-red-600'>
-
-
-
-                </div>
-              </div>
+        <Card
+          direction={{ base: "row", sm: "column" }}
+          overflow="hidden"
+          variant="outline"
+          // border="1px solid green"
+          alignItems={{ base: "center", sm: "flex-start" }}
+          shadow={"lg"}
+        >
+          <CardBody
+            className="w-full flex lg:flex-row md:flex-row sm:flex-col items-center gap-6"
+          >
+            <div>
+              <Image
+                objectFit="cover"
+                maxW={{ base: "100%", sm: "200px" }}
+                maxHeight={{ base: "100%", sm: "200px" }}
+                src={e.banner}
+                alt={e.nome}
+                shadow={"lg"}
+                borderRadius={"md"}
+                border={"1px solid gray"}
+              />
             </div>
-          </li>
-        </ul>
+
+            <Stack
+              direction="column"
+              className="flex-1"
+            >
+              <div className="text-gray-500 font-medium p-2">
+                <div className="flex justify-between items-center">
+                  <Heading size="lg">{e.nome}</Heading>
+                  <Menu>
+                    {({ isOpen }) => (
+                      <>
+                        <MenuButton
+                          bg="none"
+                          isActive={isOpen}
+                          as={Button}
+                          className="border-2"
+                        >
+                          <BsThreeDotsVertical className="text-2xl" />
+                        </MenuButton>
+                        <MenuList>
+                          <MenuItem>
+                            <BtnEditar evento={e} />
+                          </MenuItem>
+                          {isAdmin && (
+                            <MenuItem>
+                              <BtnExcluir id={e.id as string} />
+                            </MenuItem>
+                          )}
+                          <MenuItem>
+                            <AddResponsavelEvento evento_id={e.id as string} />
+                          </MenuItem>
+                        </MenuList>
+                      </>
+                    )}
+                  </Menu>
+                </div>
+                <p className="text-lg text-green-700">Descrição:</p>
+                <p className={`text-sm ${e.descricao.length > 5 ? "line-clamp-4" : ""}`}>
+                  {e.descricao}
+                </p>
+                <div className="flex flex-col gap-2 text-green-700">
+                  <div className="flex flex-row items-center gap-2">
+                    <MdCalendarMonth />
+                    <b>Duração:</b> {new Date(e.dataInicio).toLocaleDateString('pt-BR')} - {new Date(e.dataFim).toLocaleDateString('pt-BR')}
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <MdAccessTimeFilled />
+                    <b>Horário de início:</b> {e.horario}
+                    <div className="flex items-center gap-2 text-red-700">
+                      <MdPlace />
+                      <span>{e.local}</span>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div className="flex flex-row items-center gap-2 text-green-700">
+                  <b>Nº de Atividades: {e.atividades.length}</b>
+                </div>
+              </div>
+            </Stack>
+          </CardBody>
+
+          <Divider />
+          <div className="flex justify-between items-center p-4 text-green-700">
+            <div>
+              <b>Organizadores: </b>
+              {e.organizadores.map((orgEvent) => (
+                <p className="text-sm" key={orgEvent.organizador.nome}>
+                  {orgEvent.organizador.nome}
+                </p>
+              ))}
+            </div>
+          </div>
+        </Card>
+
       ))}
-    </>
+    </div>
   );
-
 }
-

@@ -2,15 +2,14 @@
 import { api } from "@/services/setupApiClient";
 
 
-export default async function getAllEvents() {
+export default async function getEventsAnalysis() {
 
     try {
 
-        const response = await api.get(`/todos-eventos`)
+        const response = await api.get("/eventos/estatisticas")
 
         const listEvents = response.data;
-      
-        
+
         return listEvents;
 
     } catch (error) {

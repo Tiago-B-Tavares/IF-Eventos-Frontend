@@ -60,12 +60,11 @@ export default function Permissoes() {
       <Button
         ref={btnRef}
         onClick={onOpen}
-       
         flex="between"
-        
         justifyContent="space-between"
+        width={"100%"}
       >
-        <span className=" mr-3">Alterar permissão </span>
+        <span className=" mr-3 text-sm flex-wrap ">Alterar permissões de usuário </span>
       </Button>
 
       <Modal
@@ -95,7 +94,7 @@ export default function Permissoes() {
                 </Box>
               ))}
             </div>
-            {/* Select para escolher a nova role */}
+        
             <Select
               mt={4}
               onChange={(e) => setRole(e.target.value as Role)}

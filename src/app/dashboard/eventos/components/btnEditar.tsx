@@ -21,10 +21,6 @@ export default function BtnEditar({ evento }: { evento: EventoProps }) {
 
     const handleEditEvent = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-
-
-
         try {
             await editEvent({
                 id: evento.id,
@@ -57,7 +53,6 @@ export default function BtnEditar({ evento }: { evento: EventoProps }) {
                 <span className="w-full mr-3">Editar dados</span>
                 <MdEditDocument className="text-lg"/>
             </Button>
-
             <AlertDialog
                 isOpen={isOpen}
                 leastDestructiveRef={cancelRef}

@@ -5,5 +5,8 @@ export const content = [
 ];
 export const theme = {
   extend: {},
+  plugins: [
+    require('@tailwindcss/line-clamp'),
+  ],
 };
 export const plugins = [];
