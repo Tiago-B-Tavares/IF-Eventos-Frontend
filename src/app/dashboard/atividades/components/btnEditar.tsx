@@ -55,7 +55,7 @@ export default function BtnEditar({ atividade }: { atividade: AtividadesProps })
         } catch (error) {
             toast({
                 title: 'Erro ao remover responsável',
-                description: "We've created your account for you.",
+                description: "We've removed your account for you.",
                 status: 'warning',
                 duration: 3000,
                 isClosable: false,

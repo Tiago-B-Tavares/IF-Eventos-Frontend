@@ -38,7 +38,7 @@ export default function ActivityTypeChart({ eventId }: { eventId: string }) {
     dataLabels: {
         enabled: true,
         formatter: function (val) {
-          return val + "%"
+          return Number(val).toFixed(2) + "%"
         },
         
       },

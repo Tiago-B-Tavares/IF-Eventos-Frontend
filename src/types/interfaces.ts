@@ -104,33 +104,33 @@ export interface User {
     role: string;
 }
 export interface ActivityByEvent {
-    nomeAtividade: string; // Nome da atividade
-    totalInscricoes: number; // Contagem total de inscrições
+    nomeAtividade: string; 
+    totalInscricoes: number;
   }
   
   export interface GroupedActivityStatistics {
-    tipo: string; // Tipo da atividade
-    nome: string; // Nome da atividade
-    quantidadeInscricoes: number; // Contagem total de inscrições
+    tipo: string; 
+    nome: string; 
+    quantidadeInscricoes: number; 
   }
   
   export interface MostPopularActivities {
-    nome: string; // Nome da atividade
-    tipo: string; // Tipo da atividade
+    nome: string; 
+    tipo: string;
     _count: {
-      inscricoes: number; // Quantidade de inscrições
+      inscricoes: number;
     };
   }
   
   export interface ActivityTypeStats {
-    tipo: string; // Tipo da atividade
-    quantidade: number; // Quantidade de atividades desse tipo
+    tipo: string; 
+    quantidade: number; 
   }
   
   export interface EventStatistics {
-    activitiesByEvent: ActivityByEvent[]; // Lista de atividades por evento
-    groupedActivityStatistics: GroupedActivityStatistics[]; // Estatísticas agrupadas por tipo
-    mostPopularActivities: MostPopularActivities[]; // Top 5 atividades mais concorridas
-    activityTypeStats: ActivityTypeStats[]; // Distribuição dos tipos de atividades
+    activitiesByEvent: ActivityByEvent[]; 
+    groupedActivityStatistics: GroupedActivityStatistics[]; 
+    mostPopularActivities: MostPopularActivities[];
+    activityTypeStats: ActivityTypeStats[]; 
   }
   

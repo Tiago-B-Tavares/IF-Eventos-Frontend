@@ -30,12 +30,14 @@ export default function Dashboard() {
       }
     }
     fetchEvents();
+    console.log(eventos.map((e) => e.id));
+    
   }, [session]);
 
   return (
     <div>
       <Heading size={"md"} className='mb-4'>Análise dos eventos</Heading>
-      <div className='w-full'>
+      <div className='w-full bg-slate-300 rounded-xl'>
         {
             eventos.map((e) => (
                 <Accordion allowToggle key={e.id} >
