@@ -1,5 +1,5 @@
 import { TipoAtividade } from "@/enums/activityTipe";
-import editActivity from "@/services/activities/editActivity";
+import editActivity from "@/app/dashboard/atividades/service/editActivity";
 import { AtividadesProps } from "@/types/interfaces";
 import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, Input, Select, Stack, useDisclosure, useToast } from "@chakra-ui/react";
 import { useRef, useState } from "react";

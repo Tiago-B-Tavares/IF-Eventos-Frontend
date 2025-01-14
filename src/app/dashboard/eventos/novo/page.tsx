@@ -1,5 +1,5 @@
-"use client";
 
+"use client";
 import React, { ChangeEvent, useState, useRef } from "react";
 import {
   Button,
@@ -11,11 +11,13 @@ import { useSession } from "next-auth/react";
 import registerNewEvent from "@/services/events/registerNewEvent";
 import Image from "next/image";
 import { TypesEventsProps } from "@/types/interfaces";
+import { useRouter } from "next/router";
 
 export default function CadastrarEvento() {
-  const { data } = useSession();
+  const { data, status } = useSession();
+
   const toast = useToast();
-  const formRef = useRef<HTMLFormElement>(null); // Referência ao formulário
+  const formRef = useRef<HTMLFormElement>(null);
   const [image, setImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -40,7 +42,18 @@ export default function CadastrarEvento() {
   }
 
   async function handleRegisterEvent(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault(); 
+    e.preventDefault();
+    if (!data) {
+      toast({
+        title: "Erro",
+        description: "Você precisa estar logado para cadastrar um evento.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
     const formData = new FormData(e.currentTarget);
     formData.append("organizador_id", organizador_id);
 
@@ -63,7 +76,6 @@ export default function CadastrarEvento() {
       setLoading(true);
       await registerNewEvent(dados);
 
- 
       toast({
         title: "Evento cadastrado!",
         description: "O evento foi cadastrado com sucesso.",
@@ -71,15 +83,12 @@ export default function CadastrarEvento() {
         duration: 5000,
         isClosable: true,
       });
+      window.location.href = '/dashboard';
 
-  
-      formRef.current?.reset();
-      setImage(null);
-      setPreviewImage("");
     } catch (err: any) {
       toast({
-        title: "Erro",
-        description: err.message,
+        title: "Atenção",
+        description: "Ocorreu um erro ao cadastrar o evento.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -89,10 +98,15 @@ export default function CadastrarEvento() {
     }
   }
 
+  if (status === "loading") {
+   
+    return <div>Carregando...</div>;
+  }
+
   return (
     <div className="bg-white p-10 gap-4 rounded-lg">
       <form
-        ref={formRef} 
+        ref={formRef}
         onSubmit={handleRegisterEvent}
         method="POST"
         encType="multipart/form-data"
@@ -104,6 +118,7 @@ export default function CadastrarEvento() {
               Imagem do Evento:
             </label>
             <Input
+            required
               type="file"
               accept="image/png, image/jpeg"
               onChange={handleFile}
@@ -129,6 +144,7 @@ export default function CadastrarEvento() {
           </label>
           <Input
             id="nome"
+            required
             name="nome"
             type="text"
             placeholder="Nome do evento"
@@ -142,6 +158,7 @@ export default function CadastrarEvento() {
           <Input
             id="descricao"
             name="descricao"
+            required
             placeholder="Descrição do evento"
             className="rounded-md"
             border={"2px solid #166534"}
@@ -154,6 +171,7 @@ export default function CadastrarEvento() {
             id="horario"
             name="horario"
             type="time"
+            required
             className="rounded-md"
             border={"2px solid #166534"}
           />
@@ -165,6 +183,7 @@ export default function CadastrarEvento() {
             id="dataInicio"
             name="dataInicio"
             type="date"
+            required
             className="rounded-md"
             border={"2px solid #166534"}
           />
@@ -176,6 +195,7 @@ export default function CadastrarEvento() {
             id="dataFim"
             name="dataFim"
             type="date"
+            required
             className="rounded-md"
             border={"2px solid #166534"}
           />
@@ -187,6 +207,7 @@ export default function CadastrarEvento() {
             id="local"
             name="local"
             type="text"
+            required
             placeholder="Local do evento"
             className="rounded-md"
             border={"2px solid #166534"}

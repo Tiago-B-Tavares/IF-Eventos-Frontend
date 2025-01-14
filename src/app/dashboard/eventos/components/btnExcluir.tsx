@@ -20,7 +20,7 @@ export function BtnExcluir({ id }: { id: string }) {
         } catch (error) {
             toast({
                 title: 'Erro ao remover responsável',
-                description: "We've created your account for you.",
+                description: "Não foi possível excluir o evento.",
                 status: 'warning',
                 duration: 3000,
                 isClosable: false,
@@ -43,7 +43,7 @@ export function BtnExcluir({ id }: { id: string }) {
                 w="100%"
                 justifyContent="space-between"
             >
-                <span className="mr-3" >Excluir Atividade</span>
+                <span className="mr-3" >Excluir evento</span>
                 <FaRegTrashAlt className="text-lg" />
             </Button>
 

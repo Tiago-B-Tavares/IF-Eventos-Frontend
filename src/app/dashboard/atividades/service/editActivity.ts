@@ -1,5 +1,5 @@
 import { TipoAtividade } from "@/enums/activityTipe";
-import { api } from "../setupApiClient";
+import { api } from "../../../../services/setupApiClient";
 interface AtividadesProps {
     id?: string;
     horario: string;

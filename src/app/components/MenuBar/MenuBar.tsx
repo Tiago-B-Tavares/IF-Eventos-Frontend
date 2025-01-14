@@ -2,7 +2,7 @@ import { FaAngleRight, FaHome, FaListAlt } from "react-icons/fa";
 import { TiGroup } from "react-icons/ti";
 import { MdAddToPhotos } from "react-icons/md";
 import { GrProjects } from "react-icons/gr";
-import { TbCertificate } from "react-icons/tb";
+import { TbCertificate, TbHome } from "react-icons/tb";
 import { MenuContexts } from "../../../contexts/MenuContexts";
 import { useContext, useState } from "react";
 import { useSession } from "next-auth/react";
@@ -32,16 +32,16 @@ export default function MenuBar() {
             </div>
             <Divider />
             <ul className="mb-4 flex flex-col gap-2">
-                <li
-                    className={`text-gray-300 flex px-4 py-4  gap-4 font-normal shadow-sm justify-start items-center rounded-md hover:bg-[#494949] hover:text-[#65d66a]`}
-                    onClick={() => setSelectedItem("dashboard")}
+                
+            <li
+                    className={`text-gray-300 flex px-4 py-4 gap-4 text-md cursor-pointer  shadow-sm justify-start items-center rounded-md hover:bg-[#494949] hover:text-[#65d66a]`}
+                
                 >
-                    <FaHome />
-                    <div className="text-gray-300 flex-1 font-semibold cursor-pointer  hover:text-[#65d66a]">
-                        <Link href="/dashboard">Início</Link>
+                    <TbHome className="text-xl" />
+                    <div className="flex-1 font-semibold cursor-pointer ">
+                        <Link className="" href="/dashboard/">Início</Link>
                     </div>
                 </li>
-
 
                 {IsAdmin && (
                     <li
@@ -56,11 +56,11 @@ export default function MenuBar() {
                                     <MenuList>
                                         <MenuItem className="text-green-700  font-semibold flex gap-2">
                                             <MdAddToPhotos className="text-green-700" />
-                                            <Link href="/dashboard/eventos/novo_evento">Novo Evento</Link>
+                                            <Link href="/dashboard/eventos/relatorio">Relatórios</Link>
                                         </MenuItem>
                                         <MenuItem className="text-green-700  font-semibold flex gap-2">
                                             <FaListAlt className="text-green-700 " />
-                                            <Link href="/dashboard/eventos/todos_eventos">Todos Eventos</Link>
+                                            <Link href="/dashboard/eventos/novo">Novo</Link>
                                         </MenuItem>
                                     </MenuList>
                                 </Portal>
@@ -89,7 +89,7 @@ export default function MenuBar() {
                             <Link href="/dashboard/participantes">Participantes</Link>
                         </div>
                     </li>)}
-                <li
+                {/* <li
                     className={`text-gray-300 flex px-4 py-4 gap-4 text-md cursor-pointer font-normal shadow-sm justify-start items-center rounded-md  hover:bg-[#494949] hover:text-[#65d66a]`}
                     onClick={() => setSelectedItem("certificados")}
                 >
@@ -97,7 +97,7 @@ export default function MenuBar() {
                     <div className="flex-1 font-semibold  cursor-pointer">
                         <Link href="/dashboard/certificados">Certificados</Link>
                     </div>
-                </li>
+                </li> */}
                 {IsAdmin && (
                     <li
                         className={`text-gray-300 flex px-4 py-4 gap-4 text-md font-normal shadow-sm justify-start items-center rounded-md hover:bg-[#494949] hover:text-[#65d66a]`}

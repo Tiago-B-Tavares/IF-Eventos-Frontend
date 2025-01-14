@@ -28,7 +28,7 @@ export interface TypesEventsProps {
     dataFim: string;
     horario: string;
     local: string;
-    image?: File | null;
+    image?: File | null | string;
     organizador_id?: string;
 }
 

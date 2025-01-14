@@ -1,5 +1,4 @@
 import axios, { AxiosError } from 'axios';
-import { getCookie } from 'cookies-next'; 
 import { signOut } from 'next-auth/react';
 
 export function setupApiClient() {

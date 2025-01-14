@@ -1,4 +1,4 @@
-import deleteActivity from "@/services/activities/deleteActivity";
+import deleteActivity from "@/app/dashboard/atividades/service/deleteActivity";
 import { AtividadesProps } from "@/types/interfaces";
 import { AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter, Button, useDisclosure, useToast } from "@chakra-ui/react";
 import { useRef } from "react";

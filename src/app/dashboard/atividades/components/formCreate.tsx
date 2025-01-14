@@ -1,6 +1,6 @@
 "use client"
 import { TipoAtividade } from "@/enums/activityTipe";
-import CreateActivity from "@/services/activities/createActivity";
+import CreateActivity from "@/app/dashboard/atividades/service/createActivity";
 import { useDisclosure, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Input, Select, Stack } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import React from "react";
