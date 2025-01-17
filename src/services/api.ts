@@ -5,7 +5,7 @@ export function setupApiClient() {
 
 
   const apiConfig = axios.create({
-    baseURL: 'http://localhost:3333',
+    baseURL: 'https://if-eventos-backend.vercel.app',
   });
 
   apiConfig.interceptors.response.use(response => {

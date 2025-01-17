@@ -8,7 +8,9 @@ export default async function RegisterEvent({
     try {
         // Cria um novo FormData
         const formData = new FormData();
-        formData.append("organizador_id", organizador_id || "");
+        if (organizador_id) {
+            formData.append("organizador_id", organizador_id);
+        }
         formData.append("nome", nome);
         formData.append("horario", horario);
         formData.append("descricao", descricao);
@@ -19,6 +21,7 @@ export default async function RegisterEvent({
         if (image) {
             formData.append("file", image);  // adiciona a imagem ao FormData
         }
+
 
         // Envia o FormData com o cabeçalho 'multipart/form-data'
         const response = await api.post("/eventos", formData, {
