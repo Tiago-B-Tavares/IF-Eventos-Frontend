@@ -145,7 +145,7 @@ export default function Atividades() {
                                                                                 <b>Local:</b> {atividade.local}
                                                                             </p>
                                                                             <p className="text-green-800">
-                                                                                <b>Horário:</b> {(new Date(atividade.horario).getHours()).toLocaleString()}h{(new Date(atividade.horario).getMinutes()).toLocaleString()}
+                                                                                <b>Horário:</b> {(new Date(atividade.horario).getHours()+3).toLocaleString()}h{(new Date(atividade.horario).getMinutes()).toLocaleString()}
                                                                             </p>
                                                                             <p className="text-green-800">
                                                                                 <b>Carga Horária:</b> {atividade.ch}h
