@@ -156,7 +156,7 @@ export default function BtnEditar({ evento }: { evento: EventoProps }) {
                                             </figure>
                                         )}
 
-                                        <Input
+                                        <Input 
                                             type="file"
                                             accept="image/png, image/jpeg"
                                             onChange={handleFile}

@@ -10,16 +10,18 @@ export default function BtnEditar({ atividade }: { atividade: AtividadesProps })
     const [nome, setNome] = useState<string>(atividade.nome);
     const [local, setLocal] = useState<string>(atividade.local);
     const [descricao, setDescricao] = useState<string>(atividade.descricao);
-    const [horario, setHorario] = useState<string>(atividade.horario);
     const [concomitante, setConcomitante] = useState<boolean>(atividade.concomitante);
     const [ch, setCh] = useState<number>(atividade.ch);
     const [vagas, setVagas] = useState<number>(atividade.vagas);
     const [tipo, setTipo] = useState<string>(atividade.tipo);
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [horario, setHorario] = useState<string>(() => {
+        const date = new Date(atividade.horario);
+        return date.toISOString().substring(11, 16);
+    });
     const cancelRef = useRef<HTMLButtonElement>(null);
     const toast = useToast()
 
-console.log("tipo ",tipo);
 
 
 
@@ -130,7 +132,7 @@ console.log("tipo ",tipo);
                                         required
                                         id="horario"
                                         placeholder="Horário"
-                                        defaultValue={horario}
+                                        value={horario}
                                         type="time"
                                         onChange={(e) => setHorario(e.target.value)}
                                         className="border border-gray-300 rounded-md"
