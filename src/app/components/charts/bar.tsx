@@ -7,10 +7,6 @@ import { ActivityTypeStats } from "@/types/interfaces";
 export default function ActivityTypeChart({ eventId }: { eventId: string }) {
   const [activityTypeStats, setActivityTypeStats] = useState<ActivityTypeStats[] | null>(null);
 
-  if (!eventId) {
-    console.log("eventId is null");
-    return null;
-  }
 
   useEffect(() => {
     async function getEventAnalysis() {
@@ -22,12 +18,17 @@ export default function ActivityTypeChart({ eventId }: { eventId: string }) {
         console.error("Erro ao obter estatísticas do evento:", error);
       }
     }
+
     getEventAnalysis();
-  }, [eventId]);
+  }, [eventId]); // Dependência: a função será chamada novamente se eventId mudar
+
+  if (!activityTypeStats) {
+    return <div>Carregando...</div>; // Exibe um indicador de carregamento
+  }
 
   // Preparando os dados para o gráfico
-  const chartSeries = activityTypeStats ? activityTypeStats.map(item => item.quantidade) : [];
-  const chartLabels = activityTypeStats ? activityTypeStats.map(item => item.tipo) : [];
+  const chartSeries = activityTypeStats.map(item => item.quantidade);
+  const chartLabels = activityTypeStats.map(item => item.tipo);
 
   const chartOptions: ApexOptions = {
     chart: {
@@ -36,12 +37,11 @@ export default function ActivityTypeChart({ eventId }: { eventId: string }) {
     },
     labels: chartLabels,
     dataLabels: {
-        enabled: true,
-        formatter: function (val) {
-          return Number(val).toFixed(2) + "%"
-        },
-        
+      enabled: true,
+      formatter: function (val) {
+        return `${(parseFloat(val.toString()) || 0).toFixed(2)}%`; // Garante formatação correta
       },
+    },
     plotOptions: {
       pie: {
         donut: {
@@ -49,7 +49,6 @@ export default function ActivityTypeChart({ eventId }: { eventId: string }) {
         },
       },
     },
-    
     title: {
       text: "Inscrições por Tipo de Atividade",
       align: "center",
@@ -57,7 +56,7 @@ export default function ActivityTypeChart({ eventId }: { eventId: string }) {
         fontSize: "20px",
         fontWeight: "bold",
         color: "#000",
-      }
+      },
     },
     legend: {
       position: "bottom", // Posiciona a legenda na parte inferior

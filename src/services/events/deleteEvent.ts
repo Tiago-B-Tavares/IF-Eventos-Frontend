@@ -12,8 +12,8 @@ export default async function deleteEvent(id:string) {
         
         const evento = response.data;
 
-        console.log(evento);
-        return evento;
+    
+        return evento.data;
 
     } catch (error) {
         console.log(error);

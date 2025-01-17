@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import React from "react";
 import { useState } from "react";
 import { FiPlusCircle } from "react-icons/fi";
+import Atividades from "../page";
 
 export default function AddActivity({ evento_id, name }: { evento_id: string, name?: any }) {
     const [nome, setNome] = useState<string>("");
@@ -119,14 +120,14 @@ export default function AddActivity({ evento_id, name }: { evento_id: string, na
                                     <option value="" disabled>
                                         Selecione o tipo
                                     </option>
-                                    <option value={TipoAtividade.Oficina}>Oficina</option>
-                                    <option value={TipoAtividade.Palestra}>Palestra</option>
-                                    <option value={TipoAtividade.Workshop}>Workshop</option>
-                                    <option value={TipoAtividade.Minicurso}>Minicurso</option>
-                                    <option value={TipoAtividade.Seminario}>Seminário</option>
-                                    <option value={TipoAtividade["Mesa Redonda"]}>Mesa Redonda</option>
-                                    <option value={TipoAtividade["Roda de Conversa"]}>Roda de Conversa</option>
-                                    <option value={TipoAtividade.Outro}>Outro</option>
+                                    <option >Oficina</option>
+                                    <option >Palestra</option>
+                                    <option >Workshop</option>
+                                    <option >Minicurso</option>
+                                    <option >Seminário</option>
+                                    <option >Mesa Redonda</option>
+                                    <option >Roda de Conversa</option>
+                                    <option >Outro</option>
                                 </Select>
 
                                 <label htmlFor="ch">Carga Horária:</label>

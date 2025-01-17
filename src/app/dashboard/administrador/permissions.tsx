@@ -53,7 +53,7 @@ export default function Permissoes() {
 
   useEffect(() => {
     fetchUsers();
-  }, [session]);
+  }, []);
 
   return (
     <>

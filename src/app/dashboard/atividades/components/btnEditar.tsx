@@ -14,11 +14,12 @@ export default function BtnEditar({ atividade }: { atividade: AtividadesProps })
     const [concomitante, setConcomitante] = useState<boolean>(atividade.concomitante);
     const [ch, setCh] = useState<number>(atividade.ch);
     const [vagas, setVagas] = useState<number>(atividade.vagas);
-    const [tipo, setTipo] = useState<TipoAtividade>(TipoAtividade.Oficina);
+    const [tipo, setTipo] = useState<string>(atividade.tipo);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cancelRef = useRef<HTMLButtonElement>(null);
     const toast = useToast()
 
+console.log("tipo ",tipo);
 
 
 
@@ -148,10 +149,11 @@ export default function BtnEditar({ atividade }: { atividade: AtividadesProps })
                                     <label htmlFor="tipo">Tipo:</label>
                                     <Select
                                         id="tipo"
-                                        onChange={(e) => setTipo(e.target.value as unknown as TipoAtividade.Palestra)}
+                                        onChange={(e) => setTipo(e.target.value)}
                                         value={tipo}
+                                        required
                                     >
-                                        <option value="Oficina">Oficina</option>
+                                        <option  value="Oficina">Oficina</option>
                                         <option value="Palestra">Palestra</option>
                                         <option value="Workshop">Workshop</option>
                                         <option value="Minicurso">Minicurso</option>

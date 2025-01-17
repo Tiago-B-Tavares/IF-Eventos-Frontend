@@ -7,7 +7,7 @@ interface AtividadesProps {
     local: string;
     descricao: string;
     vagas: number;
-    tipo: TipoAtividade;
+    tipo: string;
     concomitante: boolean;
     ch: number;
 }
@@ -18,7 +18,7 @@ export default async function EditActivity({ id, nome, horario, local, descricao
         const response = await api.put(`/atividades?id=${id}`, {
             id, nome, horario, local, descricao, tipo, vagas, concomitante, ch
         })
-        console.log(response);
+        console.log(response.data);
 
     } catch (error) {
         console.log("de ruim ", Response);

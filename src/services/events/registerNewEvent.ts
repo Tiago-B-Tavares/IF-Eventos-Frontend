@@ -19,7 +19,7 @@ export default async function RegisterEvent({
         formData.append("dataFim", dataFim);
 
         if (image) {
-            formData.append("file", image);  // adiciona a imagem ao FormData
+            formData.append("file", image); 
         }
 
 

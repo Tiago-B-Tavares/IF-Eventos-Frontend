@@ -5,7 +5,7 @@ import { Input, Box, Divider, AbsoluteCenter, Heading, Text, Image } from '@chak
 import GoogleLoginBtn from "../LoginByGoogle/googleLoginBtn";
 import { Highlight } from '@chakra-ui/react'
 import Link from "next/link";
-import NextImage from "next/image"
+
 export function FormLogin() {
 
     async function login(e: React.FormEvent<HTMLFormElement>) {

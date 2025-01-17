@@ -65,7 +65,7 @@ export default function BtnExluir({ atividade }: { atividade: AtividadesProps })
                         <AlertDialogCloseButton />
                         <AlertDialogBody>
                             <div>
-                                <p>Você tem certeza que deseja excluir a atividade "{atividade?.nome}"?</p>
+                                <p>Você tem certeza que deseja excluir a atividade {atividade?.nome}?</p>
                             </div>
                         </AlertDialogBody>
                         <AlertDialogFooter className="flex gap-3">

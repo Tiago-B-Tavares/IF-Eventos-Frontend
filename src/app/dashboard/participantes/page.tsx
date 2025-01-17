@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import getParticipants from "@/services/participant/getParticipants";
 import {
     Table,
@@ -42,6 +42,7 @@ export default function Page() {
     const cancelRef = useRef<HTMLButtonElement>(null);
     const toast = useToast();
     const { data } = useSession();
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleEditParticipant = async () => {
         if (!selectedParticipant) {
@@ -62,7 +63,21 @@ export default function Page() {
         if (!id || !nome || !email) {
             toast({
                 title: "Erro",
-                description: "Os campos Nome, Email  são obrigatórios.",
+                description: "Os campos Nome e Email são obrigatórios.",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "top",
+            });
+            return;
+        }
+
+        // Verificação de formato de email
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            toast({
+                title: "Erro",
+                description: "Formato de e-mail inválido.",
                 status: "error",
                 duration: 5000,
                 isClosable: true,
@@ -72,9 +87,7 @@ export default function Page() {
         }
 
         try {
-            // Verifique aqui os dados antes de enviar
-            console.log("Enviando dados:", { id, nome, email });
-
+            setIsLoading(true);
             const response = await api.put(`/app/user?id=${id}`, {
                 nome,
                 email
@@ -86,11 +99,10 @@ export default function Page() {
                 title: 'Edição realizada com sucesso!',
                 status: 'success',
                 duration: 5000,
-                isClosable: false,
+                isClosable: true,
                 position: "top",
             });
 
-            
             const updatedParticipants = participantes.map((p) =>
                 p.id === id ? { ...p, nome, email } : p
             );
@@ -104,30 +116,31 @@ export default function Page() {
                 status: 'error',
                 description: 'Ocorreu um erro ao editar o participante.',
                 duration: 5000,
-                isClosable: false,
+                isClosable: true,
                 position: "top",
             });
+        } finally {
+            setIsLoading(false);
         }
     };
-
-    useEffect(() => {
-        async function fetchParticipants() {
-            try {
-                const response = await getParticipants();
-                setParticipantes(response);
-            } catch (error) {
-                console.error("Erro ao obter participantes:", error);
-                toast({
-                    title: "Erro ao buscar participantes.",
-                    description: "Não foi possível carregar os dados dos participantes.",
-                    status: "error",
-                    duration: 5000,
-                    isClosable: true,
-                });
-            }
+    const fetchParticipants = useCallback(async () => {
+        try {
+            const response = await getParticipants();
+            setParticipantes(response);
+        } catch (error) {
+            console.error("Erro ao obter participantes:", error);
+            toast({
+                title: "Erro ao buscar participantes.",
+                description: "Não foi possível carregar os dados dos participantes.",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
         }
+    }, [toast])
+    useEffect(() => {
         fetchParticipants();
-    }, []);
+    }, [fetchParticipants]);
 
     const handleEditClick = (participant: ParticipantesProps) => {
         setSelectedParticipant(participant);
@@ -205,8 +218,9 @@ export default function Page() {
                                 colorScheme="blue"
                                 ml={3}
                                 onClick={handleEditParticipant}
+                                isLoading={isLoading}
                             >
-                                Salvar
+                                {isLoading ? 'Salvando...' : 'Salvar'}
                             </Button>
                         </AlertDialogFooter>
                     </AlertDialogContent>

@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next build"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
@@ -28,6 +28,7 @@
     "react-dom": "^18",
     "react-icons": "^5.2.1",
     "react-toastify": "^10.0.6",
+    "sharp": "^0.33.5",
     "tailwindcss": "^3.4.4"
   },
   "devDependencies": {

@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import {
-
     Accordion,
     AccordionButton,
     AccordionItem,
@@ -47,50 +47,34 @@ export default function Atividades() {
     const { data: session, status } = useSession();
     const [eventos, setEventos] = useState<EventoProps[]>([]);
 
-    let IsAdmin = false;
-    if (session?.user.role === "SUPER_ADMIN") {
-        IsAdmin = true;
-    }
+    const fetchEvents = useCallback(async () => {
+        const userID = session?.user?.id;
 
-    useEffect(() => {
-        async function fetchEvents() {
-            const userID = session?.user?.id
+        if (userID) {
+            try {
+                const listaEventos = session.user.role === "SUPER_ADMIN"
+                    ? await getAllEvents()
+                    : await getEvents(userID);
 
-            if (userID) {
-                if (IsAdmin) {
-                    try {
-                        const listaEventos = await getAllEvents();
-
-                        setEventos(listaEventos)
-
-                    } catch (error) {
-                        console.error("Erro ao obter lista de Eventos:", error);
-                    }
-                } else {
-                    try {
-                        const listaEventos = await getEvents(session.user.id);
-                        setEventos(listaEventos);
-                    } catch (error) {
-                        console.error("Erro ao obter lista de Eventos:", error);
-                    }
-                }
+                setEventos(listaEventos);
+            } catch (error) {
+                console.error("Erro ao obter lista de Eventos:", error);
             }
         }
+    }, [session])
+
+    useEffect(() => {
 
         fetchEvents();
-
-    }, [session]);
-
-
+    }, [fetchEvents]);
 
     return (
         <>
             {status === "loading" ? (
                 <div>Carregando...</div>
             ) : (
-               
-                    eventos.length > 0 ? (<div>
-
+                eventos.length > 0 ? (
+                    <div>
                         {eventos.map((e) => (
                             <div key={e.id} className="bg-white">
                                 <ul className="bg-slate-200">
@@ -104,29 +88,23 @@ export default function Atividades() {
                                             <Heading as="h2" size="lg" className="underline text-green-800 pb-4 ">
                                                 {e.nome}
                                             </Heading>
-
-
                                         </Box>
+
                                         <Heading as="h2" size="md" className="text-green-800 pb-4 flex flex-row gap-2 justify-start items-center'">
                                             Atividades:
-
-                                            {IsAdmin && (
+                                            {session?.user?.role === "SUPER_ADMIN" && (
                                                 <div className='text-sm'>
-                                                    {<AddActivity name={<FaPlusCircle />} evento_id={e.id as string} />}
+                                                    <AddActivity name={<FaPlusCircle />} evento_id={String(e.id)} />
                                                 </div>
                                             )}
                                         </Heading>
 
                                         {e.atividades.length > 0 ? (
                                             e.atividades.map((atividade) => (
-
                                                 <div key={atividade.id}>
                                                     <Accordion defaultIndex={[1]} allowMultiple className="bg-white rounded-lg mb-2">
                                                         <AccordionItem>
-                                                            <AccordionButton
-
-                                                                className="flex flex-wrap justify-between font-medium border border-green-700 rounded-lg text-green-700 mt-4"
-                                                            >
+                                                            <AccordionButton className="flex flex-wrap justify-between font-medium border border-green-700 rounded-lg text-green-700 mt-4">
                                                                 <div>{atividade.nome}</div>
 
                                                                 <Menu>
@@ -137,9 +115,7 @@ export default function Atividades() {
                                                                                 justifyContent="space-between"
                                                                                 isActive={isOpen}
                                                                                 as={Button}
-                                                                                onClick={(e) => {
-                                                                                    e.stopPropagation();
-                                                                                }}
+                                                                                onClick={(e) => e.stopPropagation()}
                                                                             >
                                                                                 <BsThreeDotsVertical className="text-2xl" />
                                                                             </MenuButton>
@@ -147,18 +123,12 @@ export default function Atividades() {
                                                                                 <MenuItem w="100%">
                                                                                     <BtnEditar atividade={atividade} />
                                                                                 </MenuItem>
-                                                                                {IsAdmin && (
+                                                                                {session?.user?.role === "SUPER_ADMIN" && (
                                                                                     <MenuItem w="100%">
-
-                                                                                        <>
-                                                                                            <BtnExluir atividade={atividade} />
-                                                                                        </>
-
+                                                                                        <BtnExluir atividade={atividade} />
                                                                                     </MenuItem>
                                                                                 )}
-
                                                                                 <MenuItem w="100%">
-
                                                                                     <AddResponsavel atividade_id={atividade.id} />
                                                                                 </MenuItem>
                                                                             </MenuList>
@@ -166,8 +136,8 @@ export default function Atividades() {
                                                                     )}
                                                                 </Menu>
                                                             </AccordionButton>
-                                                            <AccordionPanel pb={4} className=" flex felx-row justify-between">
 
+                                                            <AccordionPanel pb={4} className=" flex felx-row justify-between">
                                                                 <div className='flex flex-col  w-full '>
                                                                     <div className='flex flex-row justify-between'>
                                                                         <div>
@@ -176,7 +146,6 @@ export default function Atividades() {
                                                                             </p>
                                                                             <p className="text-green-800">
                                                                                 <b>Horário:</b> {(new Date(atividade.horario).getHours()).toLocaleString()}h{(new Date(atividade.horario).getMinutes()).toLocaleString()}
-
                                                                             </p>
                                                                             <p className="text-green-800">
                                                                                 <b>Carga Horária:</b> {atividade.ch}h
@@ -195,10 +164,9 @@ export default function Atividades() {
                                                                             </p>
                                                                         </div>
                                                                         <div className='flex items-center flex-col border-2 border-green-700 rounded-lg'>
-                                                                            <img src={atividade.qr_code_link} alt="Imagem da atividade" className="w-48 h-48" />
+                                                                            <Image src={atividade.qr_code_link} alt="Imagem da atividade" width={192} height={192} className='w-48 h-48' />
                                                                             <Link href={atividade.qr_code_link} target="_blank" download={atividade.qr_code_link} className="text-green-800">Baixar QR Code</Link>
                                                                         </div>
-
                                                                     </div>
                                                                     <div className='mt-4 text-green-800'>
                                                                         <Tabs align='start' variant='enclosed' border="green" bg="green.50" >
@@ -208,18 +176,17 @@ export default function Atividades() {
                                                                             </TabList>
                                                                             <TabPanels>
                                                                                 <TabPanel>
-
-                                                                                    {atividade.organizadores ? (<ul >
-                                                                                        {atividade.organizadores.map((responsavel, index) => (
-                                                                                            <li className='text-sm pb-3' key={index}>{responsavel.organizador.nome}</li>
-                                                                                        ))}
-                                                                                    </ul>
+                                                                                    {atividade.organizadores ? (
+                                                                                        <ul >
+                                                                                            {atividade.organizadores.map((responsavel, index) => (
+                                                                                                <li className='text-sm pb-3' key={index}>{responsavel.organizador.nome}</li>
+                                                                                            ))}
+                                                                                        </ul>
                                                                                     ) : (
                                                                                         <p>Ainda não há responsáveis para esta atividade.</p>
                                                                                     )}
-
-
                                                                                 </TabPanel>
+
                                                                                 <TabPanel>
                                                                                     {atividade.inscricoes && atividade.inscricoes.length > 0 ? (
                                                                                         <ul>
@@ -230,22 +197,17 @@ export default function Atividades() {
                                                                                                             <Tr>
                                                                                                                 <Th>Participante</Th>
                                                                                                                 <Th>Email</Th>
-
                                                                                                             </Tr>
                                                                                                         </Thead>
 
-
-
                                                                                                         <Tbody>
                                                                                                             {atividade.inscricoes.map((inscricao, index) => (
-                                                                                                                <Tr className='bg-green-59'>
+                                                                                                                <Tr className='bg-green-59' key={index}>
                                                                                                                     <Td>{inscricao.participante.nome}</Td>
                                                                                                                     <Td>{inscricao.participante.email}</Td>
                                                                                                                 </Tr>
                                                                                                             ))}
                                                                                                         </Tbody>
-
-
                                                                                                     </Table>
                                                                                                 </TableContainer>
                                                                                             </li>
@@ -253,7 +215,6 @@ export default function Atividades() {
                                                                                     ) : (
                                                                                         <p>Ainda não há inscritos para esta atividade.</p>
                                                                                     )}
-
                                                                                 </TabPanel>
                                                                             </TabPanels>
                                                                         </Tabs>
@@ -266,16 +227,13 @@ export default function Atividades() {
                                             ))
                                         ) : (
                                             <div>
-                                                {IsAdmin ? (
-                                                    <div
-                                                        className="text-center border border-green-700 rounded-lg text-red-500 text-xl flex justify-center flex-col items-center p-3"
-                                                    >
+                                                {session?.user?.role === "SUPER_ADMIN" ? (
+                                                    <div className="text-center border border-green-700 rounded-lg text-red-500 text-xl flex justify-center flex-col items-center p-3">
                                                         <PiFileMagnifyingGlassLight className="text-2xl" />
                                                         <p className="font-normal">Este evento ainda não possui atividades</p>
                                                     </div>
-
                                                 ) : (
-                                                    <div className="text-center border border-green-700 rounded-lg text-red-500 text-xl flex justify-center flex-col items-center  p-3">
+                                                    <div className="text-center border border-green-700 rounded-lg text-red-500 text-xl flex justify-center flex-col items-center p-3">
                                                         <p className="">Este evento ainda não possui atividades</p>
                                                     </div>
                                                 )}
@@ -285,12 +243,12 @@ export default function Atividades() {
                                 </ul>
                             </div>
                         ))}
-                    </div>) : (
-                        <div>
-                            <NoActivitiesMessage />
-                        </div>
-                    )
+                    </div>
+                ) : (
+                    <NoActivitiesMessage />
+                )
             )}
         </>
     );
 }
+

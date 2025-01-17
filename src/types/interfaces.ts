@@ -1,5 +1,6 @@
 export interface OrganizadorProps {
     organizador: {
+        [x: string]: string;
         nome: string;
     }
 
