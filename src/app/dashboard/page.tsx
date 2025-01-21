@@ -46,6 +46,7 @@ export default function Dashboard() {
     }
   }, [isAdmin, session?.user?.id]);
 
+
  
   useEffect(() => {
     if (session) {
@@ -117,7 +118,7 @@ export default function Dashboard() {
                     </div>
                     <div className="flex items-center gap-3">
                       <MdAccessTimeFilled />
-                      <b>Horário de início:</b> {new Date(e.horario).toLocaleTimeString('pt-BR')}
+                      <b>Horário de início:</b> {e.horario}
                       <div className="flex items-center gap-2 text-red-700">
                         <MdPlace />
                         <span>{e.local}</span>

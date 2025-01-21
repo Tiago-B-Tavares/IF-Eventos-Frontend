@@ -7,10 +7,7 @@ export default async function Profile() {
     if (session) {
         return (
             <div>
-                <h1>Perfil do Usuário</h1>
-                <p>Nome: {session.user.name}</p>
-                <p>Email: {session.user.email}</p>
-                {/* Adicione outros dados do usuário conforme necessário */}
+               
             </div>
         );
     }

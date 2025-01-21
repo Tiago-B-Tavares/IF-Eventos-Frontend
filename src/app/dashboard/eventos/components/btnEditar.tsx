@@ -13,10 +13,7 @@ export default function BtnEditar({ evento }: { evento: EventoProps }) {
     const [descricao, setDescricao] = useState<string>(evento.descricao);
     const [dataInicio, setDataInicio] = useState<string>(evento.dataInicio);
     const [dataFim, setDataFim] = useState<string>(evento.dataFim);
-    const [horario, setHorario] = useState<string>(() => {
-        const date = new Date(evento.horario);
-        return date.toISOString().substring(11, 16);
-    });
+    const [horario, setHorario] = useState<string>(evento.horario);
     const [image, setImage] = useState<File | null | string>(null);
     const [previewImage, setPreviewImage] = useState("");
     const [loading, setLoading] = useState(false);
