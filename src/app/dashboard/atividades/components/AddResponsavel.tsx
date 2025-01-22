@@ -1,13 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Stack, Select, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, Box, useToast } from "@chakra-ui/react";
+import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, Box, useToast } from "@chakra-ui/react";
 import getAllUsers from "@/services/user/getAllUsers";
 import { User } from "@/types/interfaces";
 import React from "react";
-import CreateColab from "@/services/responsible/createColabAtividade";
+
 import { FaPlusCircle } from "react-icons/fa";
+import CreateColabAtividade from "@/services/responsible/activity/createColabAtividade";
 
 export default function AddResponsavel({ atividade_id }: { atividade_id: string }) {
+    
     const [users, setUsers] = useState<User[]>([]);
     const [selectedUser, setSelectedUser] = useState(''); 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -19,6 +21,8 @@ export default function AddResponsavel({ atividade_id }: { atividade_id: string 
         try {
             const userList: User[] = await getAllUsers();
             setUsers(userList);
+            console.log("users", userList);
+            
         } catch (error) {
             console.log("Erro ao buscar usuários: ", error);
         }
@@ -32,11 +36,11 @@ export default function AddResponsavel({ atividade_id }: { atividade_id: string 
                 return;
             }
 
-             await CreateColab({
+            await CreateColabAtividade({
                 atividade_id,
                 organizador_id: selectedUser
             });
-           
+        
             
             toast({
                 title: 'Responsável adicionado com sucesso!',

@@ -27,10 +27,10 @@ export default function Permissoes() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef<HTMLButtonElement>(null);
   const [users, setUsers] = useState<User[]>([]);
-  const [selectedUser, setSelectedUser] = useState<string>(""); // Garantir que começa como string vazia
-  const [role, setRole] = useState<Role>(Role.ACTIVITIES_ADMIN); // Definir role inicial como padrão
+  const [selectedUser, setSelectedUser] = useState<string>(""); 
+  const [role, setRole] = useState<Role>(Role.ACTIVITIES_ADMIN);
 
-  // Função para buscar usuários
+  
   const fetchUsers = async () => {
     try {
       const userList: User[] = await getAllUsers();
@@ -40,12 +40,11 @@ export default function Permissoes() {
     }
   };
 
-  // Função para alterar permissões
   const changePermission = async () => {
     try {
      
       await ChangePermissions({ id: selectedUser, role });
-      onClose(); // Fecha o modal após a alteração bem-sucedida
+      onClose(); 
     } catch (error) {
       console.error("Erro ao mudar permissões: ", error);
     }

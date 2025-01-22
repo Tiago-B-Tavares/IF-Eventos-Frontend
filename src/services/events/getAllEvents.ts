@@ -12,13 +12,13 @@ export default async function getAllEvents() {
 
       return {
         ...event,
-        horario: formattedTime, // Aqui agora é um valor, não uma função
+        horario: formattedTime, 
       };
     });
 
-    console.log(formattedEvents);
+ 
 
-    return formattedEvents; // Retorne os eventos formatados
+    return formattedEvents; 
 
   } catch (error) {
     throw new Error("Erro ao obter lista de Eventos");

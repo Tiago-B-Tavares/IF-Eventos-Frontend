@@ -27,7 +27,9 @@ import {
     Tfoot,
     Th,
     Tr,
-    Link
+    Link,
+    MenuGroup,
+    MenuDivider
 } from "@chakra-ui/react";
 import { PiFileMagnifyingGlassLight } from "react-icons/pi";
 import { useSession } from "next-auth/react";
@@ -42,6 +44,8 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaPlusCircle } from 'react-icons/fa';
 import AddResponsavel from './components/AddResponsavel';
 import NoActivitiesMessage from './components/NoActivitiesMessage';
+import BtnExcluir from './components/btnExcluir';
+import RemoveResponsavel from './components/btnRemoveResponsavel';
 
 export default function Atividades() {
     const { data: session, status } = useSession();
@@ -64,7 +68,6 @@ export default function Atividades() {
     }, [session])
 
     useEffect(() => {
-
         fetchEvents();
     }, [fetchEvents]);
 
@@ -100,7 +103,7 @@ export default function Atividades() {
                                         </Heading>
 
                                         {e.atividades.length > 0 ? (
-                                            e.atividades.map((atividade) => (
+                                            e.atividades.map((atividade) =>(
                                                 <div key={atividade.id}>
                                                     <Accordion defaultIndex={[1]} allowMultiple className="bg-white rounded-lg mb-2">
                                                         <AccordionItem>
@@ -111,26 +114,48 @@ export default function Atividades() {
                                                                     {({ isOpen }) => (
                                                                         <>
                                                                             <MenuButton
-                                                                                bg="none"
-                                                                                justifyContent="space-between"
-                                                                                isActive={isOpen}
                                                                                 as={Button}
-                                                                                onClick={(e) => e.stopPropagation()}
+                                                                                bg="none"
+                                                                                isActive={isOpen}
+                                                                                className="border-2 p-2 rounded-lg"
                                                                             >
                                                                                 <BsThreeDotsVertical className="text-2xl" />
                                                                             </MenuButton>
-                                                                            <MenuList>
-                                                                                <MenuItem w="100%">
-                                                                                    <BtnEditar atividade={atividade} />
-                                                                                </MenuItem>
-                                                                                {session?.user?.role === "SUPER_ADMIN" && (
-                                                                                    <MenuItem w="100%">
-                                                                                        <BtnExluir atividade={atividade} />
+
+                                                                            <MenuList
+                                                                                zIndex={100}
+                                                                                maxHeight="200px"
+                                                                                overflowY="auto"
+                                                                                css={{
+                                                                                    "&::-webkit-scrollbar": {
+                                                                                        width: "4px",
+                                                                                    },
+                                                                                    "&::-webkit-scrollbar-track": {
+                                                                                        width: "6px",
+                                                                                    },
+                                                                                    "&::-webkit-scrollbar-thumb": {
+                                                                                        background: "#8ccef0",
+                                                                                        borderRadius: "24px",
+                                                                                    },
+                                                                                }}
+                                                                            >
+                                                                                <MenuGroup title="Opções do Evento">
+                                                                                    <MenuItem>
+                                                                                        <BtnEditar atividade={atividade} />
                                                                                     </MenuItem>
-                                                                                )}
-                                                                                <MenuItem w="100%">
-                                                                                    <AddResponsavel atividade_id={atividade.id} />
-                                                                                </MenuItem>
+                                                                                    <MenuItem>
+                                                                                       <BtnExcluir  id={atividade.id as string} />
+                                                                                    </MenuItem>
+                                                                                </MenuGroup>
+                                                                                <MenuDivider />
+                                                                                <MenuGroup title="Responsáveis">
+                                                                                    <MenuItem>
+                                                                                        <AddResponsavel atividade_id={atividade.id as string} />
+                                                                                    </MenuItem>
+                                                                                    <MenuItem>
+                                                                                        <RemoveResponsavel atividade_id={atividade.id as string} />
+                                                                                    </MenuItem>
+                                                                                </MenuGroup>
                                                                             </MenuList>
                                                                         </>
                                                                     )}
@@ -145,7 +170,7 @@ export default function Atividades() {
                                                                                 <b>Local:</b> {atividade.local}
                                                                             </p>
                                                                             <p className="text-green-800">
-                                                                                <b>Horário:</b> {(new Date(atividade.horario).getHours()+3).toLocaleString()}h{(new Date(atividade.horario).getMinutes()).toLocaleString()}
+                                                                                <b>Horário:</b> {(new Date(atividade.horario).getHours() + 3).toLocaleString()}h{(new Date(atividade.horario).getMinutes()).toLocaleString()}
                                                                             </p>
                                                                             <p className="text-green-800">
                                                                                 <b>Carga Horária:</b> {atividade.ch}h

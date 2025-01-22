@@ -1,31 +1,36 @@
-"use client";
 import { useEffect, useState } from "react";
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, Box, useToast } from "@chakra-ui/react";
-import getAllUsers from "@/services/user/getAllUsers";
-import { User } from "@/types/interfaces";
+import { FaPlusCircle } from "react-icons/fa";
+import deleteColabEvento from "@/services/responsible/event/deleteColabEvento";
+import GetColabEvento from "@/services/responsible/event/getColabEvento";
 import React from "react";
 
-import { FaPlusCircle } from "react-icons/fa";
-import CreateColabEvento from "@/services/responsible/event/createColabEvento";
+interface User {
+    id: string;
+    nome: string;
+}
 
-export default function AddResponsavelEvento({ evento_id }: { evento_id: string }) {
+export default function RemoveResponsavelEvento({ evento_id }: { evento_id: string }) {
     const [users, setUsers] = useState<User[]>([]);
-    const [selectedUser, setSelectedUser] = useState(''); 
+    const [selectedUser, setSelectedUser] = useState<string | null>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    
     const btnRef = React.useRef(null);
-    const toast = useToast()
-   
+    const toast = useToast();
+
     const fetchUsers = async () => {
         try {
-            const userList: User[] = await getAllUsers();
-            setUsers(userList);
+            const response = await GetColabEvento({ evento_id });
+            if (!response) {
+                console.log("Nenhum usuário encontrado.");
+                return;
+            }
+                setUsers(response);  
+           
         } catch (error) {
             console.log("Erro ao buscar usuários: ", error);
         }
     };
 
-   
     const adicionarResponsavelAtividade = async () => {
         try {
             if (!selectedUser) {
@@ -33,30 +38,29 @@ export default function AddResponsavelEvento({ evento_id }: { evento_id: string 
                 return;
             }
 
-            await CreateColabEvento({
+            await deleteColabEvento({
                 evento_id,
                 organizador_id: selectedUser
             });
-        
-            
+
             toast({
-                title: 'Responsável adicionado com sucesso!',
+                title: 'Responsável removido com sucesso!',
                 status: 'success',
                 duration: 5000,
                 isClosable: false,
-                position:"top"
-              })
-            onClose(); 
+                position: "top"
+            });
+            onClose();
         } catch (error) {
             toast({
                 title: 'Erro ao remover responsável',
-                description: "We've created your account for you.",
+                description: "Ocorreu um erro ao tentar remover o responsável.",
                 status: 'warning',
                 duration: 3000,
                 isClosable: false,
-                position:"top"
-              })
-            console.log(" ", error);
+                position: "top"
+            });
+            console.log("Erro: ", error);
         }
     };
 
@@ -66,19 +70,20 @@ export default function AddResponsavelEvento({ evento_id }: { evento_id: string 
 
     return (
         <>
-            <Button  ref={btnRef} onClick={onOpen} 
-            color="green.700" 
-             flex="between" 
-             backgroundColor="green.100"
-             _hover={{
-                bg: '#16a34a',
-                color: 'white'
-            }}
-            justifyContent="space-between"
+            <Button
+                ref={btnRef}
+                onClick={onOpen}
+                color="red.800"
+                flex="between"
+                backgroundColor="red.100"
+                _hover={{
+                    bg: '#991b1b',
+                    color: 'white'
+                }}
+                justifyContent="space-between"
             >
-
-                <span className="bg-green mr-3">
-                    Adicionar Responsável
+                <span className="bg-red mr-3">
+                    Remover Responsável
                 </span>
                 <FaPlusCircle />
             </Button>
@@ -102,9 +107,9 @@ export default function AddResponsavelEvento({ evento_id }: { evento_id: string 
                                     shadow="md"
                                     borderWidth="1px"
                                     borderRadius="md"
-                                    _hover={{ bg: "green.50" }}
-                                    onClick={() => setSelectedUser(user.id)} 
-                                    bg={selectedUser === user.id ? "green.100" : ""}
+                                    _hover={{ bg: "red.50" }}
+                                    onClick={() => setSelectedUser(user.id)}
+                                    bg={selectedUser === user.id ? "red.100" : ""}
                                 >
                                     <p className="text-lg cursor-pointer">{user.nome}</p>
                                 </Box>
@@ -115,9 +120,9 @@ export default function AddResponsavelEvento({ evento_id }: { evento_id: string 
                     <ModalFooter>
                         <Button onClick={onClose} mr={3}>Cancelar</Button>
                         <Button
-                            colorScheme="green"
-                            onClick={adicionarResponsavelAtividade} 
-                            isDisabled={!selectedUser} 
+                            colorScheme="red"
+                            onClick={adicionarResponsavelAtividade}
+                            isDisabled={!selectedUser}
                         >
                             Confirmar
                         </Button>

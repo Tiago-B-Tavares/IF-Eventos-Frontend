@@ -15,6 +15,8 @@ import {
   CardBody,
   Divider,
   Heading,
+  MenuGroup,
+  MenuDivider,
 } from "@chakra-ui/react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { MdAccessTimeFilled, MdCalendarMonth, MdPlace } from "react-icons/md";
@@ -26,6 +28,7 @@ import AddResponsavelEvento from "./eventos/components/btnAddResponsavelEvento";
 import BtnEditar from "./eventos/components/btnEditar";
 import { BtnExcluir } from "./eventos/components/btnExcluir";
 import NoEventsMessage from "./eventos/components/noEventMessage";
+import RemoveResponsavelEvento from "./eventos/components/btnRemoveResponsavelEvento";
 
 export default function Dashboard() {
   const { data: session } = useSession();
@@ -46,13 +49,11 @@ export default function Dashboard() {
     }
   }, [isAdmin, session?.user?.id]);
 
-
- 
   useEffect(() => {
     if (session) {
       fetchEventsAndActivities();
     }
-  }, [session,fetchEventsAndActivities]); 
+  }, [session, fetchEventsAndActivities]);
 
   return (
     <div className="w-full flex flex-wrap gap-6 p-4 border-2 flex-col">
@@ -88,23 +89,55 @@ export default function Dashboard() {
                       <Menu>
                         {({ isOpen }) => (
                           <>
-                            <MenuButton bg="none" isActive={isOpen} as={Button} className="border-2">
+                            <MenuButton
+                              as={Button}
+                              bg="none"
+                              isActive={isOpen}
+                              className="border-2 p-2 rounded-lg"
+                            >
                               <BsThreeDotsVertical className="text-2xl" />
                             </MenuButton>
-                            <MenuList>
-                              <MenuItem>
-                                <BtnEditar evento={e} />
-                              </MenuItem>
-                              <MenuItem>
-                                <BtnExcluir id={e.id as string} />
-                              </MenuItem>
-                              <MenuItem>
-                                <AddResponsavelEvento evento_id={e.id as string} />
-                              </MenuItem>
+
+                            <MenuList
+                              zIndex={100}
+                              maxHeight="200px"
+                              overflowY="auto"
+                              css={{
+                                "&::-webkit-scrollbar": {
+                                  width: "4px",
+                                },
+                                "&::-webkit-scrollbar-track": {
+                                  width: "6px",
+                                },
+                                "&::-webkit-scrollbar-thumb": {
+                                  background: "#8ccef0",
+                                  borderRadius: "24px",
+                                },
+                              }}
+                            >
+                              <MenuGroup title="Opções do Evento">
+                                <MenuItem>
+                                  <BtnEditar evento={e} />
+                                </MenuItem>
+                                <MenuItem>
+                                  <BtnExcluir id={e.id as string} />
+                                </MenuItem>
+                              </MenuGroup>
+                              <MenuDivider />
+                              <MenuGroup title="Responsáveis">
+                                <MenuItem>
+                                  <AddResponsavelEvento evento_id={e.id as string} />
+                                </MenuItem>
+                                <MenuItem>
+                                  <RemoveResponsavelEvento evento_id={e.id as string} />
+                                </MenuItem>
+                              </MenuGroup>
                             </MenuList>
                           </>
                         )}
                       </Menu>
+
+
                     )}
                   </div>
                   <p className="text-lg text-green-700">Descrição:</p>
@@ -142,13 +175,12 @@ export default function Dashboard() {
                 ))}
               </div>
             </div>
-          </Card>
+          </Card >
         ))
       ) : (
         <NoEventsMessage />
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }
-
-

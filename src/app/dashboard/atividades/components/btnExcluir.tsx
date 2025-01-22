@@ -6,18 +6,18 @@ import { FaRegTrashAlt } from "react-icons/fa";
 
 
 
-export default function BtnExluir({ atividade }: { atividade: AtividadesProps }) {
+export default function BtnExluir({ id }: { id:string}) {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cancelRef = useRef<HTMLButtonElement>(null);
 
  
     const handleDeleteActivity = async () => {
-        if (atividade) {
+        if (id) {
             
             try {
 
-                await deleteActivity(atividade.id);
+                await deleteActivity(id);
                
                 onClose();
               
@@ -65,7 +65,7 @@ export default function BtnExluir({ atividade }: { atividade: AtividadesProps })
                         <AlertDialogCloseButton />
                         <AlertDialogBody>
                             <div>
-                                <p>Você tem certeza que deseja excluir a atividade {atividade?.nome}?</p>
+                                <p>Você tem certeza que deseja excluir esta atividade ?</p>
                             </div>
                         </AlertDialogBody>
                         <AlertDialogFooter className="flex gap-3">
