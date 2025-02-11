@@ -16,7 +16,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body>
+      <head>
+        <title>IF-Eventos</title>
+        <link rel="shortcut icon" type="imagex/png" href="/images/icon.ico"></link>
+        <meta charSet="utf-8" />
+      </head>
+      <body className="m-0 p-x box-border">
         <NextAuthSessionProvider>
           <ChakraUIProvider>
             {children}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, cache } from "react";
 import { useSession } from "next-auth/react";
 import {
   Image,
@@ -29,14 +29,14 @@ import BtnEditar from "./eventos/components/btnEditar";
 import { BtnExcluir } from "./eventos/components/btnExcluir";
 import NoEventsMessage from "./eventos/components/noEventMessage";
 import RemoveResponsavelEvento from "./eventos/components/btnRemoveResponsavelEvento";
-
+import { format } from "date-fns";
 export default function Dashboard() {
   const { data: session } = useSession();
   const [eventos, setEventos] = useState<EventoProps[]>([]);
   const isAdmin = session?.user?.role === "SUPER_ADMIN";
 
   // Função para buscar eventos
-  const fetchEventsAndActivities = useCallback(async () => {
+  const fetchEventsAndActivities = useCallback(cache( async () => {
     if (session?.user?.id) {
       try {
         const listaEventos = isAdmin
@@ -47,13 +47,13 @@ export default function Dashboard() {
         console.error("Erro ao obter lista de Eventos:", error);
       }
     }
-  }, [isAdmin, session?.user?.id]);
+  }), []);
 
   useEffect(() => {
     if (session) {
       fetchEventsAndActivities();
     }
-  }, [session, fetchEventsAndActivities]);
+  }, []);
 
   return (
     <div className="w-full flex flex-wrap gap-6 p-4 border-2 flex-col">
@@ -82,7 +82,7 @@ export default function Dashboard() {
               </div>
 
               <Stack direction="column" className="flex-1">
-                <div className="text-gray-500 font-medium p-2">
+                <div key={e.id} className="text-gray-500 font-medium p-2">
                   <div className="flex justify-between items-center" key={e.id}>
                     <Heading size="lg">{e.nome}</Heading>
                     {isAdmin && (
@@ -147,20 +147,20 @@ export default function Dashboard() {
                   <div className="flex flex-col gap-2 text-green-700">
                     <div className="flex flex-row items-center gap-2">
                       <MdCalendarMonth />
-                      <b>Duração:</b> {new Date(e.dataInicio).toLocaleDateString('pt-BR')} - {new Date(e.dataFim).toLocaleDateString('pt-BR')}
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <MdAccessTimeFilled />
-                      <b>Horário de início:</b> {e.horario}
-                      <div className="flex items-center gap-2 text-red-700">
-                        <MdPlace />
-                        <span>{e.local}</span>
+                      <b>Duração:</b> {format(new Date(e.dataInicio), 'dd/MM/yyyy')} - {format(new Date(e.dataFim), 'dd/MM/yyyy')}
+                      <div className="flex items-center gap-3">
+                        <MdAccessTimeFilled />
+                        <b>Horário de início:</b> {e.horario}
+                        <div className="flex items-center gap-2 text-red-700">
+                          <MdPlace />
+                          <span>{e.local}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="flex flex-row items-center gap-2 text-green-700">
-                    <b>Nº de Atividades: {e.atividades.length}</b>
+                    <div className="flex flex-row items-center gap-2 text-green-700">
+                      <b>Nº de Atividades: {e.atividades.length}</b>
+                    </div>
                   </div>
                 </div>
               </Stack>

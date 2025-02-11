@@ -6,9 +6,12 @@ interface UpdateUserDataParams {
 }
 
 export default async function UpdateUserData({ id, data }: UpdateUserDataParams) {
+    console.log("api: ", id, data);
+    
     try {
-        const response = await api.put(`/user/${id}`, data);
+        const response = await api.put(`/user?id=${id}`, data);
         
+
         return response.data;
 
     } catch (error: any) {

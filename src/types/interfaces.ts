@@ -1,3 +1,5 @@
+import { ApexOptions } from "apexcharts";
+
 export interface OrganizadorProps {
     organizador: {
         [x: string]: string;
@@ -37,7 +39,7 @@ export interface InscritosProps {
     participante: {
         nome: string;
         email: string;
-      
+
     };
 }
 
@@ -46,6 +48,7 @@ export interface AtividadesProps {
     horario: string;
     nome: string;
     local: string;
+    data: string;
     descricao: string;
     vagas: number;
     eventoId: string;
@@ -105,33 +108,39 @@ export interface User {
     role: string;
 }
 export interface ActivityByEvent {
-    nomeAtividade: string; 
+    nomeAtividade: string;
     totalInscricoes: number;
-  }
-  
-  export interface GroupedActivityStatistics {
-    tipo: string; 
-    nome: string; 
-    quantidadeInscricoes: number; 
-  }
-  
-  export interface MostPopularActivities {
-    nome: string; 
+}
+
+export interface GroupedActivityStatistics {
+    tipo: string;
+    nome: string;
+    quantidadeInscricoes: number;
+}
+
+export interface MostPopularActivities {
+    nome: string;
     tipo: string;
     _count: {
-      inscricoes: number;
+        inscricoes: number;
     };
-  }
-  
-  export interface ActivityTypeStats {
-    tipo: string; 
-    quantidade: number; 
-  }
-  
-  export interface EventStatistics {
-    activitiesByEvent: ActivityByEvent[]; 
-    groupedActivityStatistics: GroupedActivityStatistics[]; 
-    mostPopularActivities: MostPopularActivities[];
-    activityTypeStats: ActivityTypeStats[]; 
-  }
-  
+}
+
+
+
+export interface DataItem {
+    _count: { _all: number };
+    data: string;
+}
+
+export interface ApexChartProps {
+    data: DataItem[];
+   
+}
+export interface ChartState {
+    series: {
+        name: string;
+        data: number[];
+    }[];
+    options: ApexOptions;
+}

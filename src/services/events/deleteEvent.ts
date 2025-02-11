@@ -5,6 +5,8 @@ export default async function deleteEvent(id: string) {
     const response = await api.delete(`/evento?id=${id}`);
     return response.data; 
   } catch (error: any) {
+    console.log("de ruim ", error);
+    
     if (error.response) {
       return { status: error.response.status, message: error.response.data };
     }

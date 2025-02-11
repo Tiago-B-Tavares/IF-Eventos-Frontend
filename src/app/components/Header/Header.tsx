@@ -35,13 +35,13 @@ export default function MainHeader() {
                     </MenuButton>
                     <MenuList>
                         <MenuGroup>
-                            <MenuItem className="text-purple-700">
-                                <FaRegUser className="mr-3 text-purple-700" />
-                                <Link className="text-purple-700" href="/dashboard/perfil">Meu Perfil</Link>
+                            <MenuItem className="text-gray-700">
+                                <FaRegUser className="mr-3 text-gray-700" />
+                                <Link className="text-gray-700" href="/dashboard/perfil">Meu Perfil</Link>
                             </MenuItem>
                         </MenuGroup>
                         <MenuDivider />
-                        <div className="pl-3 text-purple-700 flex items-center">
+                        <div className="pl-3 text-gray-700 flex items-center">
                             <RiLogoutBoxLine className="mr-3" />
                             <BtnLogout />
                         </div>

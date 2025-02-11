@@ -7,7 +7,7 @@ import registerNewUser from "@/services/user/registerNewUser";
 import getUserData from "@/services/user/getUserDataByEmail";
 import UpdateUserData from "@/services/user/updateUserData";
 import getUserDataByEmail from "@/services/user/getUserDataByEmail";
-
+import { cache } from "react";
 const nextAuthOptions: NextAuthOptions = {
 
   providers: [
@@ -27,14 +27,17 @@ const nextAuthOptions: NextAuthOptions = {
 
         try {
 
-          const signin = await api.post("/session", {
+          const signin = cache(async () => await api.post("/session", {
             email,
             password,
-          });
+          }
+          )
+        )
 
-          if (signin.status !== 200) return null;
+          const signinResult = await signin();
+          if (signinResult.status !== 200) return null;
 
-          const user = signin.data;
+          const user = signinResult.data;
 
           return {
             id: user.id,
@@ -105,7 +108,9 @@ const nextAuthOptions: NextAuthOptions = {
 
         const dataUser = await getUserDataByEmail(user.email as string);
 
+
         token.role = dataUser.role
+        token.googleId = dataUser?.googleId
       }
       return token;
     },
@@ -113,6 +118,7 @@ const nextAuthOptions: NextAuthOptions = {
       if (token) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
+        session.user.googleId = token.googleId as string;
       }
       return session;
     },

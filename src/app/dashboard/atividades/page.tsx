@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
+import {  format } from "date-fns";
 import {
     Accordion,
     AccordionButton,
@@ -46,6 +47,7 @@ import AddResponsavel from './components/AddResponsavel';
 import NoActivitiesMessage from './components/NoActivitiesMessage';
 import BtnExcluir from './components/btnExcluir';
 import RemoveResponsavel from './components/btnRemoveResponsavel';
+
 
 export default function Atividades() {
     const { data: session, status } = useSession();
@@ -171,6 +173,9 @@ export default function Atividades() {
                                                                             </p>
                                                                             <p className="text-green-800">
                                                                                 <b>Horário:</b> {(new Date(atividade.horario).getHours() + 3).toLocaleString()}h{(new Date(atividade.horario).getMinutes()).toLocaleString()}
+                                                                            </p>
+                                                                            <p className="text-green-800">
+                                                                                <b>Data:</b> {format(new Date(atividade.data), "dd/MM/yyyy")}
                                                                             </p>
                                                                             <p className="text-green-800">
                                                                                 <b>Carga Horária:</b> {atividade.ch}h

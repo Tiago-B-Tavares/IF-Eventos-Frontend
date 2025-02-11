@@ -23,11 +23,13 @@ export default function MenuBar() {
     return (
         <aside className={` bg-[#0c0b0b] flex justify-start flex-col  sm:overflow-hidden transition-all min-h-screen duration-200   ${open ? "w-72 p-2" : "w-0 p-0 overflow-hidden"} lg:w-72 pt-4 lg:px-4  pb-4  `}>
 
-            <div className="mb-4 text-center flex justify-center items-center w-full ">
+            <div className="mb-4 text-center flex justify-center items-center w-full h-24 ">
                 <Image
-                    className="w-[80%] h-full object-cover pb-4"
-                    src="https://res.cloudinary.com/deyfr61i2/image/upload/v1736170681/logoBranca_bunpaf.png"
+                    className=" h-full w-full object-cover pb-2  border-2 border-white"
+                    src="https://res.cloudinary.com/deyfr61i2/image/upload/v1738113769/imagem_2025-01-06_103243224-removebg-preview_lawk7s.png"
                     alt="Logo"
+                   width={300}
+                   height={300}
                 />
             </div>
             <Divider />
@@ -56,7 +58,11 @@ export default function MenuBar() {
                                     <MenuList>
                                         <MenuItem className="text-green-700  font-semibold flex gap-2">
                                             <MdAddToPhotos className="text-green-700" />
-                                            <Link href="/dashboard/eventos/relatorio">Relatórios</Link>
+                                            <Link href="/dashboard/eventos/relatorio/eventos">Relatórios geral de Evento</Link>
+                                        </MenuItem>
+                                        <MenuItem className="text-green-700  font-semibold flex gap-2">
+                                            <MdAddToPhotos className="text-green-700" />
+                                            <Link href="/dashboard/eventos/relatorio/atividades">Relatórios geral de atividades</Link>
                                         </MenuItem>
                                         <MenuItem className="text-green-700  font-semibold flex gap-2">
                                             <FaListAlt className="text-green-700 " />

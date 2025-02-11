@@ -105,6 +105,7 @@ export default function CadastrarEvento() {
 
   return (
     <div className="bg-white p-10 gap-4 rounded-lg">
+      {"organizador_id: " + organizador_id}
       <form
         ref={formRef}
         onSubmit={handleRegisterEvent}

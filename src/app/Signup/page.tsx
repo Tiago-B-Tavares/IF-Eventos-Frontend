@@ -61,52 +61,62 @@ export default function Signup() {
     return (
         <div className='w-full min-h-screen h-auto flex justify-center items-center'>
             <div className="w-full lg:w-96 h-auto py-7 flex flex-col items-center justify-center border rounded-2xl shadow-2xl">
-                <Heading as="h3" fontSize="4xl" className="text-purple-700  pt-3">
-                    <Highlight
-                        query="cadastro!"
-                        styles={{ px: "2", py: "", rounded: "lg", bg: "orange.100", color: "#7e22ce" }}
-                    >
-                        Faça seu cadastro!
+                <Heading as='h2' fontSize="4xl" className=" text-black flex-1">
+                    <Highlight query='cadastro' styles={{ px: '2', py: '1', rounded: 'lg', bg: '#0c0b0b', color: '#fff' }}>
+                        Faça seu cadastro
                     </Highlight>
                 </Heading>
+
                 <form onSubmit={getDataNewUser} className="flex items-center flex-col gap-4 py-6  lg:w-64 sm:w-96">
                     <Input
                         type="text"
                         placeholder="Nome"
+                        _placeholder={{ color: 'black' }}
                         name="nome"
                         size="md"
-                        focusBorderColor="#7e22ce"
+                        border={'none'}
+                        borderBottom={'2px solid black'}
+                        focusBorderColor='#000'
                     />
                     <Input
                         type="email"
                         placeholder="Email"
+                        _placeholder={{ color: 'black', opacity: 0.9 }}
                         name="email"
                         size="md"
-                        focusBorderColor="#7e22ce"
+                        border={'none'}
+                        borderBottom={'2px solid black'}
+                        focusBorderColor='#000'
                     />
                     <Input
-                        className="outline-purple-700"
+
                         type="password"
                         placeholder="Senha"
+                        _placeholder={{ color: 'black', opacity: 0.9 }}
                         name="senha"
                         size="md"
-                        focusBorderColor="#7e22ce"
+                        border={'none'}
+                        borderBottom={'2px solid black'}
+                        focusBorderColor='#000'
                     />
                     <Input
-                        className="outline-purple-700"
+
                         type="password"
                         placeholder="Confirme sua senha"
+                        _placeholder={{ color: 'black', opacity: 0.9 }}
                         name="confirmaSenha"
                         size="md"
-                        focusBorderColor="#7e22ce"
+                        border={'none'}
+                        borderBottom={'2px solid black'}
+                        focusBorderColor='#000'
                     />
-                    <button className="text-white bg-purple-700 py-2 px-4 rounded-md" type="submit">
+                    <button className="text-white bg-[#0c0b0b] hover:bg-gray-700 py-2 px-4 rounded-md" type="submit">
                         Cadastrar
                     </button>
                 </form>
-                <Text className="text-xs text-right mb-7" color="#7e22ce">
+                <Text className="text-xs text-right mb-7" >
                     Já possui uma conta?{' '}
-                    <Link href='/'>
+                    <Link href='/' className='underline'>
                         Faça login!
                     </Link>
                 </Text>
